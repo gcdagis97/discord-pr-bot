@@ -51,10 +51,16 @@ async def on_ready():
                     if all([m_id in reaction_ids for m_id in m_ids]):
                         await message.channel.send(f"Match result verified.", reference=message)
                         with open("results.csv", "a") as f:
-                            message_split = message.content.split()
-                            player1_id = int(message_split[2].replace("<", "").replace("@", "").replace(">", ""))
-                            player2_id = int(message_split[4].replace("<", "").replace("@", "").replace(">", ""))
+                            message_split = message.content.split()                            
                             
+                            player1_id = remove_non_numeric_and_cast(message_split[2])
+                            if player2_id is not None:
+                                print("Modified string as an integer:", player2_id)
+
+                            player2_id = remove_non_numeric_and_cast(message_split[4])
+                            if player2_id is not None:
+                                print("Modified string as an integer:", player2_id)
+
                             player1_user = await client.fetch_user(player1_id)
                             player2_user = await client.fetch_user(player2_id)
                             player1_name = player1_user.name
@@ -74,6 +80,11 @@ async def on_ready():
 
             except discord.errors.NotFound:
                 os.remove(f"active-verification/{guild_id}/{channel_id}/{verification_id}")
+
+
+def remove_non_numeric_and_cast(s):
+    s = ''.join(c for c in s if c.isdigit())
+    return int(s)
 
 
 with open(".token", "r") as f:
