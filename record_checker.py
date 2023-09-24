@@ -54,13 +54,7 @@ async def on_ready():
                             message_split = message.content.split()                            
                             
                             player1_id = remove_non_numeric_and_cast(message_split[2])
-                            if player1_id is not None:
-                                print("Modified string as an integer:", player1_id)
-
                             player2_id = remove_non_numeric_and_cast(message_split[4])
-                            if player2_id is not None:
-                                print("Modified string as an integer:", player2_id)
-
                             player1_user = await client.fetch_user(player1_id)
                             player2_user = await client.fetch_user(player2_id)
                             player1_name = player1_user.name
@@ -83,7 +77,7 @@ async def on_ready():
 
 
 def remove_non_numeric_and_cast(s):
-    s = ''.join(c for c in s if c.isdigit())
+    s = ''.join([c for c in s if c.isdigit()])
     return int(s)
 
 
